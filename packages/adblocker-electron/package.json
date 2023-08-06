@@ -37,7 +37,7 @@
     "electron": ">11"
   },
   "dependencies": {
-    "@ductridev/adblocker": "^1.26.6",
+    "@ductri/adblocker": "^1.26.6",
     "@cliqz/adblocker-electron-preload": "^1.26.6",
     "tldts-experimental": "^6.0.12"
   },
