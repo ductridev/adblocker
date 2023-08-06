@@ -42,7 +42,6 @@
 </p>
 
 ---
-
 This is forked from [AdBlocker](https://github.com/ghostery/adblocker)
 
 ## Getting Started
