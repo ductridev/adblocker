@@ -40,6 +40,7 @@
 </p>
 
 ---
+This is forked from [AdBlocker](https://github.com/ghostery/adblocker)
 
 Cliqz' adblocker is a JavaScript library for *blocking ads, trackers, and annoyances* with a strong focus on [efficiency](https://whotracks.me/blog/adblockers_performance_study.html). It was designed with compatibility in mind and integrates seamlessly with the following environments:
 
