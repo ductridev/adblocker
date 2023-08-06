@@ -306,5 +306,5 @@ export class ElectronBlocker extends FiltersEngine {
   }
 }
 
-// re-export @cliqz/adblocker symbols for convenience
-export * from '@cliqz/adblocker';
+// re-export @ductri/adblocker symbols for convenience
+export * from '@ductri/adblocker';
