@@ -2,7 +2,7 @@ import { app, BrowserWindow } from 'electron';
 import fetch from 'cross-fetch';
 import { readFileSync, writeFileSync } from 'fs';
 
-import { ElectronBlocker, fullLists, Request } from '@cliqz/adblocker-electron';
+import { ElectronBlocker, fullLists, Request } from '@ductri/adblocker-electron';
 
 function getUrlToLoad(): string {
   let url = 'https://google.com';
@@ -16,6 +16,7 @@ function getUrlToLoad(): string {
 let mainWindow: BrowserWindow | null = null;
 
 async function createWindow() {
+  const customInjectStyles = "display: none !important";
   mainWindow = new BrowserWindow({
     webPreferences: {
       nodeIntegration: false,
@@ -32,6 +33,7 @@ async function createWindow() {
     {
       enableCompression: true,
     },
+    customInjectStyles,
     {
       path: 'engine.bin',
       read: async (...args) => readFileSync(...args),

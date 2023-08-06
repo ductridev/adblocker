@@ -1,4 +1,5 @@
 <h1 align="center">Adblocker</h2>
+This is forked from [AdBlocker](https://github.com/ghostery/adblocker)
 
 <p align="center">
   <em>
@@ -10,42 +11,41 @@
   </em>
   <br />
   <em>
-    <a href="https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker">Node.js</a>
-    · <a href="https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-puppeteer">Puppeteer</a>
-    · <a href="https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-electron">Electron</a>
-    · <a href="https://github.com/cliqz-oss/adblocker/tree/master/packages/adblocker-webextension">WebExtension</a>
+    <a href="https://github.com/ductridev/adblocker/tree/master/packages/adblocker">Node.js</a>
+    · <a href="https://github.com/ductridev/adblocker/tree/master/packages/adblocker-puppeteer">Puppeteer</a>
+    · <a href="https://github.com/ductridev/adblocker/tree/master/packages/adblocker-electron">Electron</a>
+    · <a href="https://github.com/ductridev/adblocker/tree/master/packages/adblocker-webextension">WebExtension</a>
   </em>
 </p>
 
 <p align="center">
-  <a href="https://github.com/cliqz-oss/adblocker/actions?query=workflow%3ATests">
-    <img alt="Github Actions Build Status" src="https://img.shields.io/github/workflow/status/cliqz-oss/adblocker/Tests?label=tests&style=flat-square"></a>
-  <a href="https://github.com/cliqz-oss/adblocker/actions?query=workflow%3Assets">
-    <img alt="Github Actions Assets Status" src="https://img.shields.io/github/workflow/status/cliqz-oss/adblocker/Assets?label=assets&style=flat-square"></a>
+  <a href="https://github.com/ductridev/adblocker/actions?query=workflow%3ATests">
+    <img alt="Github Actions Build Status" src="https://img.shields.io/github/workflow/status/ductridev/adblocker/Tests?label=tests&style=flat-square"></a>
+  <a href="https://github.com/ductridev/adblocker/actions?query=workflow%3Assets">
+    <img alt="Github Actions Assets Status" src="https://img.shields.io/github/workflow/status/ductridev/adblocker/Assets?label=assets&style=flat-square"></a>
   <a href="https://twitter.com/acdlite/status/974390255393505280">
     <img alt="Blazing Fast" src="https://img.shields.io/badge/speed-blazing%20%F0%9F%94%A5-brightgreen.svg?style=flat-square"></a>
-  <a href="https://www.npmjs.com/package/@cliqz/adblocker">
-    <img alt="npm version" src="https://img.shields.io/npm/v/@cliqz/adblocker.svg?style=flat-square"></a>
-  <a href="https://www.npmjs.com/package/@cliqz/adblocker">
-    <img alt="weekly downloads from npm" src="https://img.shields.io/npm/dw/@cliqz/adblocker.svg?style=flat-square"></a>
+  <a href="https://www.npmjs.com/package/@ductri/adblocker">
+    <img alt="npm version" src="https://img.shields.io/npm/v/@ductri/adblocker.svg?style=flat-square"></a>
+  <a href="https://www.npmjs.com/package/@ductri/adblocker">
+    <img alt="weekly downloads from npm" src="https://img.shields.io/npm/dw/@ductri/adblocker.svg?style=flat-square"></a>
   <br/>
   <a href="#badge">
     <img alt="code style: prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square"></a>
   <a href="https://twitter.com/cliqz">
     <img alt="Follow Cliqz on Twitter" src="https://img.shields.io/twitter/follow/cliqz.svg?label=follow+cliqz&style=flat-square"></a>
-  <a href="https://github.com/cliqz-oss/adblocker">
+  <a href="https://github.com/ductridev/adblocker">
     <img alt="Dependabot" src="https://img.shields.io/badge/dependabot-enabled-brightgreen?logo=dependabot&style=flat-square"></a>
-  <a href="https://github.com/cliqz-oss/adblocker/blob/master/LICENSE">
-    <img alt="License Badge" src="https://img.shields.io/github/license/cliqz-oss/adblocker?style=flat-square"></a>
-  <a href="https://lgtm.com/projects/g/cliqz-oss/adblocker?mode=list">
-    <img alt="LGTM Badge" src="https://img.shields.io/lgtm/alerts/github/cliqz-oss/adblocker?style=flat-square"></a>
+  <a href="https://github.com/ductridev/adblocker/blob/master/LICENSE">
+    <img alt="License Badge" src="https://img.shields.io/github/license/ductridev/adblocker?style=flat-square"></a>
+  <a href="https://lgtm.com/projects/g/ductridev/adblocker?mode=list">
+    <img alt="LGTM Badge" src="https://img.shields.io/lgtm/alerts/github/ductridev/adblocker?style=flat-square"></a>
 </p>
-
 ---
 
 ## Getting Started
 
-Install: `npm install --save @cliqz/adblocker`.
+Install: `npm install --save @ductri/adblocker`.
 
 ## Usage
 
@@ -54,13 +54,13 @@ start blocking ads:
 
 If you already have filters locally:
 ```javascript
-import { FiltersEngine } from '@cliqz/adblocker';
+import { FiltersEngine } from '@ductri/adblocker';
 const engine = FiltersEngine.parse(fs.readFileSync('easylist.txt', 'utf-8'));
 ```
 
 Fetching lists from URLs:
 ```javascript
-import { FiltersEngine } from '@cliqz/adblocker';
+import { FiltersEngine } from '@ductri/adblocker';
 engine = await FiltersEngine.fromLists(fetch, [
  'https://easylist.to/easylist/easylist.txt'
 ]);
@@ -68,7 +68,7 @@ engine = await FiltersEngine.fromLists(fetch, [
 
 Use ready-made configs to block ads and optionally trackers:
 ```javascript
-import { FiltersEngine } from '@cliqz/adblocker';
+import { FiltersEngine } from '@ductri/adblocker';
 engine = await FiltersEngine.fromPrebuiltAdsOnly(fetch); // ads only
 engine = await FiltersEngine.fromPrebuiltAdsAndTracking(fetch); // ads and tracking
 ```
@@ -76,7 +76,7 @@ engine = await FiltersEngine.fromPrebuiltAdsAndTracking(fetch); // ads and track
 Once you have your `engine`, start matching requests and block ads:
 
 ```javascript
-import { Request } from '@cliqz/adblocker';
+import { Request } from '@ductri/adblocker';
 
 const { match } = engine.match(Request.fromRawDetails({
   type: 'script',
@@ -91,7 +91,7 @@ WebExtension, etc.), the `Request` provides a unified APIs and helpers functions
 for initialization on different platforms:
 
 ```javascript
-import { Request } from '@cliqz/adblocker';
+import { Request } from '@ductri/adblocker';
 
 const request = Request.fromRawDetails({
   url: 'https://sub.example.com',
@@ -115,11 +115,11 @@ elements or injecting scripts.
 #### Network Filters
 
 Here is how one can parse and match individual *network filters* using
-the [NetworkFilter](https://github.com/cliqz-oss/adblocker/blob/master/packages/adblocker/src/filters/network.ts) class. It offers multiple
+the [NetworkFilter](https://github.com/ductridev/adblocker/blob/master/packages/adblocker/src/filters/network.ts) class. It offers multiple
 accessors and helpers to parse, match and manipulate network filters.
 
 ```javascript
-import { NetworkFilter } from '@cliqz/adblocker';
+import { NetworkFilter } from '@ductri/adblocker';
 
 // Parse filter from string
 const filter = NetworkFilter.parse('||domain.com/ads.js$script');
@@ -136,7 +136,7 @@ console.log(filter.fromImage()); // false = cannot match 'image' requests
 
 Matching network filter against requests:
 ```javascript
-import { Request } from '@cliqz/adblocker';
+import { Request } from '@ductri/adblocker';
 
 const request = Request.fromRawDetails({
   type: 'script',
@@ -149,10 +149,10 @@ console.log(filter.match(request)); // true
 
 #### Cosmetic Filters
 
-Similarly, one can parse cosmetic filters using the [CosmeticFilter](https://github.com/cliqz-oss/adblocker/blob/master/packages/adblocker/src/filters/cosmetic.ts) class.
+Similarly, one can parse cosmetic filters using the [CosmeticFilter](https://github.com/ductridev/adblocker/blob/master/packages/adblocker/src/filters/cosmetic.ts) class.
 
 ```javascript
-const { CosmeticFilter } = require('@cliqz/adblocker');
+const { CosmeticFilter } = require('@ductri/adblocker');
 
 // Parsing filter from string
 const filter = CosmeticFilter.parse('domain.*,domain2.com###selector');
@@ -172,12 +172,12 @@ Manipulating filters at a low level is useful to build tooling or
 debugging, but they are not appropriate for efficient blocking of
 requests (it would require iterating on all the filters to know if
 a request needs to be blocked). Instead, we can make use of the
-[FiltersEngine](https://github.com/cliqz-oss/adblocker/blob/master/packages/adblocker/src/engine/engine.ts) class which can be seen as a "container" for both
+[FiltersEngine](https://github.com/ductridev/adblocker/blob/master/packages/adblocker/src/engine/engine.ts) class which can be seen as a "container" for both
 network and cosmetic filters. The filters are organized in a very
 compact way which also enables fast matching.
 
 ```javascript
-import { FiltersEngine, NetworkFilter, CosmeticFilter, Request } from '@cliqz/adblocker';
+import { FiltersEngine, NetworkFilter, CosmeticFilter, Request } from '@ductri/adblocker';
 
 // Parse multiple filters at once
 let engine = FiltersEngine.parse(`
