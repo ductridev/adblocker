@@ -52,6 +52,38 @@ function fetchResource(fetch: Fetch, url: string): Promise<string> {
 const PREFIX =
   'https://raw.githubusercontent.com/cliqz-oss/adblocker/master/packages/adblocker/assets';
 
+const ABP_PREFIX = "https://easylist-downloads.adblockplus.org";
+
+export const abpLists = [
+  `${ABP_PREFIX}/abpindo+easylist.txt`,
+  `${ABP_PREFIX}/abpvn+easylist.txt`,
+  `${ABP_PREFIX}/bulgarian_list+easylist.txt`,
+  `${ABP_PREFIX}/dandelion_sprouts_nordic_filters+easylist.txt`,
+  `${ABP_PREFIX}/easylist.txt`,
+  `${ABP_PREFIX}/easylistchina+easylist.txt`,
+  `${ABP_PREFIX}/easylistczechslovak+easylist.txt`,
+  `${ABP_PREFIX}/easylistdutch+easylist.txt`,
+  `${ABP_PREFIX}/easylistgermany+easylist.txt`,
+  `${ABP_PREFIX}/israellist+easylist.txt`,
+  `${ABP_PREFIX}/easylistitaly+easylist.txt`,
+  `${ABP_PREFIX}/easylistlithuania+easylist.txt`,
+  `${ABP_PREFIX}/easylistpolish+easylist.txt`,
+  `${ABP_PREFIX}/easylistportuguese+easylist.txt`,
+  `${ABP_PREFIX}/easylistspanish+easylist.txt`,
+  `${ABP_PREFIX}/indianlist+easylist.txt`,
+  `${ABP_PREFIX}/koreanlist+easylist.txt`,
+  `${ABP_PREFIX}/latvianlist+easylist.txt`,
+  `${ABP_PREFIX}/liste_ar+liste_fr+easylist.txt`,
+  `${ABP_PREFIX}/liste_fr+easylist.txt`,
+  `${ABP_PREFIX}/rolist+easylist.txt`,
+  `${ABP_PREFIX}/ruadlist+easylist.txt`,
+  `${ABP_PREFIX}/abp-filters-anti-cv.txt`,
+  `${ABP_PREFIX}/i_dont_care_about_cookies.txt`,
+  `${ABP_PREFIX}/fanboy-notifications.txt`,
+  `${ABP_PREFIX}/easyprivacy.txt`,
+  `${ABP_PREFIX}/fanboy-social.txt`,
+]
+
 export const adsLists = [
   `${PREFIX}/easylist/easylist.txt`,
   `${PREFIX}/easylist/easylistgermany.txt`,
@@ -72,7 +104,7 @@ export const adsAndTrackingLists = [
   `${PREFIX}/ublock-origin/privacy.txt`,
 ];
 
-export const fullLists = [...adsAndTrackingLists, `${PREFIX}/easylist/easylist-cookie.txt`];
+export const fullLists = [...abpLists, ...adsAndTrackingLists, `${PREFIX}/easylist/easylist-cookie.txt`];
 
 /**
  * Fetch latest version of enabledByDefault blocking lists.

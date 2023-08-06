@@ -1,6 +1,6 @@
 {
   "name": "@ductri/adblocker-electron",
-  "version": "1.26.13",
+  "version": "1.26.19",
   "description": "ductridev adblocker Electron wrapper",
   "author": {
     "name": "ductridev"
@@ -37,7 +37,7 @@
     "electron": ">11"
   },
   "dependencies": {
-    "@ductri/adblocker": "^1.26.9",
+    "@ductri/adblocker": "^1.26.23",
     "@cliqz/adblocker-electron-preload": "^1.26.6",
     "tldts-experimental": "^6.0.12"
   },

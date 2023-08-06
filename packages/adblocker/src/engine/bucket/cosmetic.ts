@@ -11,7 +11,7 @@ import type { IMessageFromBackground } from '@cliqz/adblocker-content';
 import { compactTokens, concatTypedArrays } from '../../compact-set';
 import Config from '../../config';
 import { StaticDataView } from '../../data-view';
-import CosmeticFilter, { DEFAULT_HIDDING_STYLE } from '../../filters/cosmetic';
+import CosmeticFilter, { DEFAULT_HIDDING_STYLE, IMAGE_STYLESHEET, IMAGE_URL, SWAP_WITH_IMAGE } from '../../filters/cosmetic';
 import {
   getEntityHashesFromLabelsBackward,
   getHostnameHashesFromLabelsBackward,
@@ -40,16 +40,34 @@ export function createStylesheet(rules: string[], style: string): string {
     // We use string concatenation here since it's faster than using
     // `Array.prototype.join`.
     let selector = rules[i];
+    if (SWAP_WITH_IMAGE) {
+      if (!selector.includes(" img")) {
+        selector += " img"
+      }
+    }
+
     for (
       let j = i + 1, end = Math.min(rules.length, i + maximumNumberOfSelectors);
       j < end;
       j += 1
     ) {
-      selector += ',\n' + rules[j];
+      if (SWAP_WITH_IMAGE) {
+        if (!rules[j].includes(" img")) {
+          selector += ',\n' + rules[j] + " img";
+        } else {
+          selector += ',\n' + rules[j];
+        }
+      } else {
+        selector += ',\n' + rules[j];
+      }
     }
 
     // Insert CSS after last selector (e.g.: `{ display: none }`)
-    selector += styleStr;
+    if (SWAP_WITH_IMAGE) {
+      selector += ` { content: url('${IMAGE_URL}') !important; ${IMAGE_STYLESHEET.join(";") + ";"}} `
+    } else {
+      selector += styleStr;
+    }
 
     // If `rules` has less than the limit, we can short-circuit here
     if (rules.length < maximumNumberOfSelectors) {

@@ -20,7 +20,7 @@ import {
   fullLists,
 } from '../fetch';
 import { HTMLSelector } from '../html-filtering';
-import CosmeticFilter, { setDefaultHiddingStyle } from '../filters/cosmetic';
+import CosmeticFilter, { enableSwapImage, setDefaultHiddingStyle } from '../filters/cosmetic';
 import NetworkFilter from '../filters/network';
 import { block } from '../filters/dsl';
 import { IListDiff, IRawDiff, parseFilters } from '../lists';
@@ -66,12 +66,12 @@ function shouldApplyHideException(filters: NetworkFilter[]): boolean {
 export interface BlockingResponse {
   match: boolean;
   redirect:
-    | undefined
-    | {
-        body: string;
-        contentType: string;
-        dataUrl: string;
-      };
+  | undefined
+  | {
+    body: string;
+    contentType: string;
+    dataUrl: string;
+  };
   exception: NetworkFilter | undefined;
   filter: NetworkFilter | undefined;
   metadata: IPatternLookupResult[] | undefined;
@@ -97,7 +97,16 @@ export default class FilterEngine extends EventEmitter<
     this: T,
     init: () => Promise<InstanceType<T>>,
     caching?: Caching,
+    customInjectStyles: string = "",
+    replaceWithImage = {
+      swapWithImage: false,
+      imageUrl: "",
+      imageStylesheet: [],
+    },
   ): Promise<InstanceType<T>> {
+    if (customInjectStyles) setDefaultHiddingStyle(customInjectStyles);
+    if (replaceWithImage.swapWithImage) enableSwapImage(replaceWithImage.swapWithImage, replaceWithImage.imageUrl, replaceWithImage.imageStylesheet);
+
     if (caching === undefined) {
       return init();
     }
@@ -128,22 +137,27 @@ export default class FilterEngine extends EventEmitter<
     fetch: Fetch,
     urls: string[],
     config: Partial<Config> = {},
-    customInjectStyles: string = "",
     caching?: Caching,
+    customInjectStyles: string = "",
+    replaceWithImage = {
+      swapWithImage: false,
+      imageUrl: "",
+      imageStylesheet: [],
+    },
   ): Promise<InstanceType<T>> {
     return this.fromCached(() => {
       const listsPromises = fetchLists(fetch, urls);
       const resourcesPromise = fetchResources(fetch);
 
       return Promise.all([listsPromises, resourcesPromise]).then(([lists, resources]) => {
-        const engine = this.parse(lists.join('\n'), config, customInjectStyles);
+        const engine = this.parse(lists.join('\n'), config, customInjectStyles, replaceWithImage);
         if (resources !== undefined) {
           engine.updateResources(resources, '' + resources.length);
         }
 
         return engine as InstanceType<T>;
       });
-    }, caching);
+    }, caching, customInjectStyles, replaceWithImage);
   }
 
   /**
@@ -157,10 +171,15 @@ export default class FilterEngine extends EventEmitter<
   public static fromPrebuiltAdsOnly<T extends typeof FilterEngine>(
     this: T,
     fetchImpl: Fetch = fetch,
-    customInjectStyles: string = "",
     caching?: Caching,
+    customInjectStyles: string = "",
+    replaceWithImage = {
+      swapWithImage: false,
+      imageUrl: "",
+      imageStylesheet: [],
+    },
   ): Promise<InstanceType<T>> {
-    return this.fromLists(fetchImpl, adsLists, {}, customInjectStyles, caching);
+    return this.fromLists(fetchImpl, adsLists, {}, caching, customInjectStyles, replaceWithImage);
   }
 
   /**
@@ -170,10 +189,15 @@ export default class FilterEngine extends EventEmitter<
   public static fromPrebuiltAdsAndTracking<T extends typeof FilterEngine>(
     this: T,
     fetchImpl: Fetch = fetch,
-    customInjectStyles: string = "",
     caching?: Caching,
+    customInjectStyles: string = "",
+    replaceWithImage = {
+      swapWithImage: false,
+      imageUrl: "",
+      imageStylesheet: [],
+    },
   ): Promise<InstanceType<T>> {
-    return this.fromLists(fetchImpl, adsAndTrackingLists, {}, customInjectStyles, caching);
+    return this.fromLists(fetchImpl, adsAndTrackingLists, {}, caching, customInjectStyles, replaceWithImage);
   }
 
   /**
@@ -183,16 +207,27 @@ export default class FilterEngine extends EventEmitter<
   public static fromPrebuiltFull<T extends typeof FilterEngine>(
     this: T,
     fetchImpl: Fetch = fetch,
-    customInjectStyles: string = "",
     caching?: Caching,
+    customInjectStyles: string = "",
+    replaceWithImage = {
+      swapWithImage: false,
+      imageUrl: "",
+      imageStylesheet: [],
+    },
   ): Promise<InstanceType<T>> {
-    return this.fromLists(fetchImpl, fullLists, {}, customInjectStyles, caching);
+    return this.fromLists(fetchImpl, fullLists, {}, caching, customInjectStyles, replaceWithImage);
   }
 
   public static fromTrackerDB<T extends typeof FilterEngine>(
     this: T,
     rawJsonDump: any,
     options: Partial<Config> = {},
+    customInjectStyles: string = "",
+    replaceWithImage = {
+      swapWithImage: false,
+      imageUrl: "",
+      imageStylesheet: [],
+    },
   ): InstanceType<T> {
     const config = new Config(options);
     const metadata = new Metadata(rawJsonDump);
@@ -202,7 +237,7 @@ export default class FilterEngine extends EventEmitter<
       filters.push(...pattern.filters);
     }
 
-    const engine = this.parse(filters.join('\n'), config);
+    const engine = this.parse(filters.join('\n'), config, customInjectStyles, replaceWithImage);
     engine.metadata = metadata;
 
     return engine as InstanceType<T>;
@@ -213,12 +248,18 @@ export default class FilterEngine extends EventEmitter<
     filters: string,
     options: Partial<Config> = {},
     customInjectStyles: string = "",
+    replaceWithImage = {
+      swapWithImage: false,
+      imageUrl: "",
+      imageStylesheet: [],
+    },
   ): T {
     const config = new Config(options);
     return new this({
       ...parseFilters(filters, config),
       config,
       customInjectStyles,
+      replaceWithImage
     });
   }
 
@@ -308,6 +349,9 @@ export default class FilterEngine extends EventEmitter<
   public filters: NetworkFilterBucket;
   public cosmetics: CosmeticFilterBucket;
   public customInjectStyles: string;
+  public swapWithImage: boolean;
+  public imageUrl: string;
+  public imageStylesheet: never[];
 
   public metadata: Metadata | undefined;
   public resources: Resources;
@@ -319,22 +363,35 @@ export default class FilterEngine extends EventEmitter<
     networkFilters = [],
 
     config = new Config(),
-    customInjectStyles = "",
     lists = new Map(),
+    customInjectStyles = "",
+    replaceWithImage = {
+      swapWithImage: false,
+      imageUrl: "",
+      imageStylesheet: [],
+    },
   }: {
     cosmeticFilters?: CosmeticFilter[];
     networkFilters?: NetworkFilter[];
     lists?: Map<string, string>;
     config?: Partial<Config>;
     customInjectStyles?: string;
+    replaceWithImage?: {
+      swapWithImage: boolean,
+      imageUrl: string,
+      imageStylesheet: never[],
+    };
   } = {}) {
     super(); // init super-class EventEmitter
-
     this.config = new Config(config);
 
     // Set custom default hidding styles
     this.customInjectStyles = customInjectStyles;
-    if(this.customInjectStyles) setDefaultHiddingStyle(this.customInjectStyles);
+
+    // Declare swap ad with image
+    this.swapWithImage = replaceWithImage.swapWithImage
+    this.imageUrl = replaceWithImage.imageUrl
+    this.imageStylesheet = replaceWithImage.imageStylesheet
 
     // Subscription management: disabled by default
     this.lists = lists;

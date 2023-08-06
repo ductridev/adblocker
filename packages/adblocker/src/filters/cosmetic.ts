@@ -40,8 +40,17 @@ import { HTMLSelector, extractHTMLSelectorFromRule } from '../html-filtering';
 
 const EMPTY_TOKENS: [Uint32Array] = [EMPTY_UINT32_ARRAY];
 export var DEFAULT_HIDDING_STYLE: string = 'display: none !important;';
+export var SWAP_WITH_IMAGE: boolean = false;
+export var IMAGE_URL: string = "";
+export var IMAGE_STYLESHEET: never[] = [];
 
-export function setDefaultHiddingStyle (style : string = "" ){
+export function enableSwapImage(swapWithImage: boolean = false, imageUrl: string = "", imageStylesheet: never[] = []) {
+  SWAP_WITH_IMAGE = swapWithImage;
+  IMAGE_URL = imageUrl;
+  IMAGE_STYLESHEET = imageStylesheet
+}
+
+export function setDefaultHiddingStyle(style: string = "") {
   DEFAULT_HIDDING_STYLE = style;
 }
 
@@ -109,10 +118,10 @@ const isValidCss = (() => {
     typeof document !== 'undefined'
       ? document.createElement('div')
       : {
-          matches: () => {
-            /* noop */
-          },
-        };
+        matches: () => {
+          /* noop */
+        },
+      };
   const matches = (selector: string): void | boolean => div.matches(selector);
   const validSelectorRe = /^[#.]?[\w-.]+$/;
 
