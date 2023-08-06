@@ -1,6 +1,6 @@
 {
   "name": "@ductri/adblocker-electron",
-  "version": "1.26.9",
+  "version": "1.26.10",
   "description": "ductridev adblocker Electron wrapper",
   "author": {
     "name": "ductridev"
