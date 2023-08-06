@@ -41,6 +41,7 @@
     <img alt="LGTM Badge" src="https://img.shields.io/lgtm/alerts/github/ductridev/adblocker?style=flat-square"></a>
 </p>
 ---
+
 This is forked from [AdBlocker](https://github.com/ghostery/adblocker)
 
 ## Getting Started
