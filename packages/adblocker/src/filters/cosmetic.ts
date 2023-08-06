@@ -39,7 +39,11 @@ import IFilter from './interface';
 import { HTMLSelector, extractHTMLSelectorFromRule } from '../html-filtering';
 
 const EMPTY_TOKENS: [Uint32Array] = [EMPTY_UINT32_ARRAY];
-export const DEFAULT_HIDDING_STYLE: string = 'display: none !important;';
+export var DEFAULT_HIDDING_STYLE: string = 'display: none !important;';
+
+export function setDefaultHiddingStyle (style : string = "" ){
+  DEFAULT_HIDDING_STYLE = style;
+}
 
 /**
  * Given a `selector` starting with either '#' or '.' check if what follows is

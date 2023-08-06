@@ -1,11 +1,11 @@
 {
-  "name": "@cliqz/adblocker",
+  "name": "@ductridev/adblocker",
   "version": "1.26.6",
-  "description": "Cliqz adblocker library",
+  "description": "ductridev adblocker library",
   "author": {
-    "name": "Cliqz"
+    "name": "ductridev"
   },
-  "homepage": "https://github.com/cliqz-oss/adblocker#readme",
+  "homepage": "https://github.com/ductridev/adblocker#readme",
   "license": "MPL-2.0",
   "main": "dist/cjs/adblocker.js",
   "module": "dist/es6/adblocker.js",
@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/cliqz-oss/adblocker.git",
+    "url": "git+ssh://git@github.com/ductridev/adblocker.git",
     "directory": "packages/adblocker"
   },
   "scripts": {
@@ -76,6 +76,10 @@
     {
       "name": "Anton Lazarev",
       "email": "antonok35@gmail.com"
+    },
+    {
+      "name": "ductridev",
+      "email": "trihd123@gmail.com"
     }
   ],
   "devDependencies": {

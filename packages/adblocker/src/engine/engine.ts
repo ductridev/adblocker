@@ -20,7 +20,7 @@ import {
   fullLists,
 } from '../fetch';
 import { HTMLSelector } from '../html-filtering';
-import CosmeticFilter from '../filters/cosmetic';
+import CosmeticFilter, { setDefaultHiddingStyle } from '../filters/cosmetic';
 import NetworkFilter from '../filters/network';
 import { block } from '../filters/dsl';
 import { IListDiff, IRawDiff, parseFilters } from '../lists';
@@ -128,6 +128,7 @@ export default class FilterEngine extends EventEmitter<
     fetch: Fetch,
     urls: string[],
     config: Partial<Config> = {},
+    injectStyles: string = "",
     caching?: Caching,
   ): Promise<InstanceType<T>> {
     return this.fromCached(() => {
@@ -135,7 +136,7 @@ export default class FilterEngine extends EventEmitter<
       const resourcesPromise = fetchResources(fetch);
 
       return Promise.all([listsPromises, resourcesPromise]).then(([lists, resources]) => {
-        const engine = this.parse(lists.join('\n'), config);
+        const engine = this.parse(lists.join('\n'), config, injectStyles);
         if (resources !== undefined) {
           engine.updateResources(resources, '' + resources.length);
         }
@@ -156,9 +157,10 @@ export default class FilterEngine extends EventEmitter<
   public static fromPrebuiltAdsOnly<T extends typeof FilterEngine>(
     this: T,
     fetchImpl: Fetch = fetch,
+    injectStyles: string = "",
     caching?: Caching,
   ): Promise<InstanceType<T>> {
-    return this.fromLists(fetchImpl, adsLists, {}, caching);
+    return this.fromLists(fetchImpl, adsLists, {}, injectStyles, caching);
   }
 
   /**
@@ -168,9 +170,10 @@ export default class FilterEngine extends EventEmitter<
   public static fromPrebuiltAdsAndTracking<T extends typeof FilterEngine>(
     this: T,
     fetchImpl: Fetch = fetch,
+    injectStyles: string = "",
     caching?: Caching,
   ): Promise<InstanceType<T>> {
-    return this.fromLists(fetchImpl, adsAndTrackingLists, {}, caching);
+    return this.fromLists(fetchImpl, adsAndTrackingLists, {}, injectStyles, caching);
   }
 
   /**
@@ -180,9 +183,10 @@ export default class FilterEngine extends EventEmitter<
   public static fromPrebuiltFull<T extends typeof FilterEngine>(
     this: T,
     fetchImpl: Fetch = fetch,
+    injectStyles: string = "",
     caching?: Caching,
   ): Promise<InstanceType<T>> {
-    return this.fromLists(fetchImpl, fullLists, {}, caching);
+    return this.fromLists(fetchImpl, fullLists, {}, injectStyles, caching);
   }
 
   public static fromTrackerDB<T extends typeof FilterEngine>(
@@ -208,11 +212,13 @@ export default class FilterEngine extends EventEmitter<
     this: new (...args: any[]) => T,
     filters: string,
     options: Partial<Config> = {},
+    injectStyles: string = "",
   ): T {
     const config = new Config(options);
     return new this({
       ...parseFilters(filters, config),
       config,
+      injectStyles,
     });
   }
 
@@ -301,6 +307,7 @@ export default class FilterEngine extends EventEmitter<
   public redirects: NetworkFilterBucket;
   public filters: NetworkFilterBucket;
   public cosmetics: CosmeticFilterBucket;
+  public injectStyles: string;
 
   public metadata: Metadata | undefined;
   public resources: Resources;
@@ -312,16 +319,22 @@ export default class FilterEngine extends EventEmitter<
     networkFilters = [],
 
     config = new Config(),
+    injectStyles = "",
     lists = new Map(),
   }: {
     cosmeticFilters?: CosmeticFilter[];
     networkFilters?: NetworkFilter[];
     lists?: Map<string, string>;
     config?: Partial<Config>;
+    injectStyles?: string;
   } = {}) {
     super(); // init super-class EventEmitter
 
     this.config = new Config(config);
+
+    // Set custom default hidding styles
+    this.injectStyles = injectStyles;
+    if(this.injectStyles) setDefaultHiddingStyle(this.injectStyles);
 
     // Subscription management: disabled by default
     this.lists = lists;

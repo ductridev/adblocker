@@ -40,17 +40,21 @@
     {
       "name": "Andriy Kornatskyy",
       "email": "andriy.kornatskyy@live.com"
+    },
+    {
+      "name": "ductridev",
+      "email": "trihd123@gmail.com"
     }
   ],
   "license": "MPL-2.0",
-  "homepage": "https://github.com/cliqz-oss/adblocker#readme",
+  "homepage": "https://github.com/ductridev/adblocker#readme",
   "bugs": {
-    "url": "https://github.com/cliqz-oss/adblocker/issues"
+    "url": "https://github.com/ductridev/adblocker/issues"
   },
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/cliqz-oss/adblocker.git"
+    "url": "git+ssh://git@github.com/ductridev/adblocker.git"
   },
   "workspaces": [
     "./packages/*"
