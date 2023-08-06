@@ -9,7 +9,7 @@
 import { ipcMain } from 'electron';
 import { parse } from 'tldts-experimental';
 
-import { ElectronRequestType, FiltersEngine, Request } from '@ductridev/adblocker';
+import { ElectronRequestType, FiltersEngine, Request } from '@ductri/adblocker';
 import type {
   IBackgroundCallback,
   IMessageFromBackground,
